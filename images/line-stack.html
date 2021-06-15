@@ -1,0 +1,197 @@
+<!--
+    THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/zh/editor.html?c=line-stack
+-->
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body style="height:150%; margin: 0">
+        <div id="container" style="height: 100%" ></div>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-nightly@5.1.2-dev.20210512/dist/echarts.min.js"></script>
+        <script type="text/javascript">
+        
+        //接收username
+        function oneValuesUsername(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var username = paramRequest['username']
+            return username;
+        }
+
+        //接收gid
+        function oneValuesGid(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var gid = paramRequest['gid']
+            return gid;
+        }
+
+        //接收minId
+        function oneValuesTT(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var tt = paramRequest['tt']
+            return tt;
+        }
+
+
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        var totalNeuNum ;
+        var option;
+        
+        var LineList = []; 
+        var time = []; 
+
+        totalTT = oneValuesTT()
+        nowTT = 100
+
+        $(function () {
+           ready();
+           show_setInterval = setInterval("ready()", 3000);
+        });
+
+        function startRequest() {
+            
+                
+                max = nowTT
+                min = max - 100
+                option = {
+                    
+                grid:{
+                    x:50,
+                    y:0,
+                    x2:50,
+                    y2:0,
+                    borderWidth:1
+                },
+                graphic: [
+                {
+                    type: 'text',
+                    z: 100,
+                    left: '50',
+                    top: '3%',
+                    style: {
+                    fill: '#333',
+                    text: '当前神经元ID:  '+min+'  ---至---  '+max,
+                    font: '18px Microsoft YaHei'
+                    }
+                },
+                ],
+
+
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: time,
+                    axisTick:{
+                        show: false,
+                    },
+                    show:false,
+                    axisLine: {
+                     onZero: false
+                    }
+                }  ,
+            yAxis: {
+                min:-100,
+                max:13000,
+                show : false,
+                },
+                series: LineList
+                
+            };
+
+            if (option && typeof option === 'object') {
+                this.chart = echarts.init(document.getElementById('container'));
+                this.chart.clear();
+                myChart.setOption(option);
+            }
+            nowTT = nowTT + 100
+        }
+
+
+    function ready(){ 
+        $.ajax({
+                //url:'http://192.168.204.121:7777/api/v1/neuron/getOnesvl/'+oneValuesGid()+'/'+oneValuesTT(),    //请求的URL地址  
+                //url:'http://192.168.204.121:7777/api/v1/neuron/getOnesvl/'+oneValuesGid()+'/'+ nowTT ,    //请求的URL地址
+                url:'http://192.168.204.121:7777/api/v1/neuron/getmulneuvlgrombin/'+oneValuesUsername()+'/'+oneValuesGid()+'/'+(nowTT-100)+'/'+(nowTT-1) ,    //请求的URL地址      
+                type:'GET', 
+                timeout:0,   
+                dataType:'json',  
+                success:function(data,textStatus,jqXHR){  
+                    LineList = [];
+                    time = []; 
+                    var NeuNum = 60
+                    totalNeuNum = data.data.NeuNum
+                    var item= data.data.NeuronVls.Nvls;    
+                    //for(var i=0;i<item.length;i++){     // item长度是100
+                    for(var i=0;i<NeuNum;i++){   
+                        // 每个基础上加1000
+                        for(var j=0;j<item[i].Nvl.length;j++){  // item[i].Nvl长度是1000
+                            (item[i].Nvl)[j] = (item[i].Nvl)[j] + i*200;
+                        }
+
+                        var eachLine =   {
+                            type: 'line',
+                            symbol: 'none',
+                            data: item[i].Nvl,
+                            animationDuration: 2500,
+                        }
+
+                        LineList.push(eachLine)
+
+                    }
+                    for(var i=1;i<1000;i++){
+                        time.push(i)
+                    }
+                    startRequest()
+                    
+                },
+                error:function(xhr,textStatus){ //失败的回调函数
+                    console.log(textStatus)  
+                }
+            }   // ajax
+        ) 
+        if (nowTT == totalNeuNum) {
+        clearInterval(show_setInterval);
+        }
+    }  // ready
+
+        </script>
+    </body>
+</html>
+    

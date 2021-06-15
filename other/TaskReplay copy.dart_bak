@@ -1,0 +1,145 @@
+import 'dart:math';
+import 'dart:async';
+import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
+import "package:velocity_x/velocity_x.dart";
+import 'package:liquid_ui/liquid_ui.dart';
+//import 'package:fl_chart/fl_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:pluto_grid/pluto_grid.dart';
+import 'package:flutter_web_chartjs/chartjs.models.dart';
+import 'package:flutter_web_chartjs/chartjs.wrapper.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+import 'package:snns_cm/comm/comm.dart';
+import 'package:snns_cm/config/application.dart';
+import 'package:snns_cm/config/routes.dart';
+import 'package:snns_cm/components/toolsbar/menu.dart';
+import 'package:snns_cm/components/toolsbar/topbar.dart';
+import 'package:snns_cm/components/toolsbar/bottombar.dart';
+
+class TaskReplay extends StatefulWidget {
+  @override
+  _TaskReplayState createState() => _TaskReplayState();
+}
+
+class _TaskReplayState extends State<TaskReplay> {
+  Timer timer;
+  int counter = 0;
+  final maxX = 200.0;
+  final maxY = 100.0;
+  final radius = 2.0;
+
+  Color blue1 = const Color(0xFF0D47A1);
+  Color blue2 = const Color(0xFF42A5F5).withOpacity(0.8);
+
+  @override
+  void initState() {
+    super.initState();
+
+    timer = Timer.periodic(Duration(seconds: 2), (Timer t) => addValue());
+  }
+
+  void addValue() {
+    setState(() {
+      counter++;
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: VxBox(
+        child: HStack([
+          GcMenu('TaskReplay'), //左侧主菜单栏
+          VStack(
+            //主界面（导航栏、功能区、底部信息栏）
+            [
+              GcTopBar('TaskReplay'), //主界面导航栏,
+              VxBox(
+                  child: ExpansionTile(
+                title: '模拟任务数据回放'.text.size(20).bold.color(Vx.blue600).make(),
+                initiallyExpanded: true,
+                childrenPadding: const EdgeInsets.all(5),
+                expandedAlignment: Alignment.topLeft,
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  HStack([
+                    LFlatButton(
+                      child: const Text('选择任务'),
+                      //onPressed: handleAddRowButton,
+                    ),
+                    LFlatButton(
+                      child: const Text('读取数据'),
+                      //onPressed: handleRemoveSelectedRowsButton,
+                    ),
+                    LFlatButton(
+                      child: const Text('刷新数据'),
+                      onPressed: () {},
+                    ),
+                  ])
+                ],
+              )).withDecoration(boxDecorationNONE).make().p(5),
+              monitorChart(''),
+              GcBottomBar(),
+            ],
+          ).expand()
+        ]),
+      ).color(Vx.gray100).make(),
+    );
+  }
+
+  // Charts For CPU and Mem
+  Widget monitorChart(String cid) {
+    return Expanded(child:ScatterChart(
+      ScatterChartData(
+        scatterSpots: randomData(),
+        minX: 0,
+        maxX: maxX,
+        minY: 0,
+        maxY: maxY,
+        borderData: FlBorderData(
+          show: true,
+        ),
+        gridData: FlGridData(
+          show: false,
+          drawHorizontalLine: true,
+          drawVerticalLine: true,
+        ),
+        titlesData: FlTitlesData(
+          show: false,
+        ),
+        scatterTouchData: ScatterTouchData(
+          enabled: false,
+        ),
+      ),
+      swapAnimationDuration: const Duration(milliseconds: 0),
+    ).centered(),);
+  }
+
+  List<ScatterSpot> randomData() {
+    const blue1Count = 8000;
+    const blue2Count = 2000;
+    return List.generate(blue1Count + blue2Count, (i) {
+      Color color;
+      if (i < blue1Count) {
+        color = blue1;
+      } else {
+        color = blue2;
+      }
+
+      return ScatterSpot(
+        (Random().nextDouble() * (maxX - 8)) + 4,
+        (Random().nextDouble() * (maxY - 8)) + 4,
+        color: color,
+        radius: 2, //(Random().nextDouble() * 16) + 4,
+      );
+    });
+  }
+}

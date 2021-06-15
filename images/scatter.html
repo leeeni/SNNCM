@@ -1,0 +1,126 @@
+<!--
+    THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/zh/editor.html?c=scatter-simple
+-->
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body style="height: 100%; margin: 0">
+        <div id="container" style="height: 100%"></div>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+        <script type="text/javascript">
+
+        var dom = document.getElementById("container");
+        var myChart =echarts.init(dom); // echarts.init(document.getElementById('main')); container
+        var app = {};
+        var scatterlist =[];
+        var option;
+        var totalNeuNum;
+
+        //接收username
+        function oneValuesUsername(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var username = paramRequest['username']
+            return username;
+        }
+
+        //接收gid
+        function oneValuesGid(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var gid = paramRequest['gid']
+            return gid;
+        }
+
+        //接收tt
+        function oneValuesTT(){
+            var url=window.location.search;  //获取url中"?"符后的字串 
+            var paramRequest = new Object(); 
+            if(url.indexOf("?")!=-1){
+                var str = url.substr(1);     //去除“？”，保留之后的所有字符
+    　　　　     var strs=str.split("&");     //切割字符串，把每个参数及参数值分成数组 
+                for(var i=0;i<strs.length;i++){
+    　　　　　　    paramRequest[strs[i].split("=")[0]]=strs[i].split("=")[1];//前者为参数名称，后台为参数值
+    　　　　    }
+            }
+            var tt = paramRequest['tt']
+            return tt;
+        }
+
+        totalTT = oneValuesTT()
+        nowTT = 10000
+
+        $(function () {
+           ready();
+           show_setInterval = setInterval("ready()", 25000);
+        });
+
+        function startRequest() {
+            console.log(nowTT)    
+            option = {
+                xAxis: {},
+                yAxis: {
+                    min:nowTT-10000,
+                    max:nowTT
+                },
+                series: [{
+                    symbolSize: 4,
+                    data:scatterlist,
+                    type: 'scatter'
+            }]};
+
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+
+        nowTT = nowTT + 10000
+    }
+
+//$(document).ready(function(){   //在HTML文档加载完成后执行
+function ready(){ 
+    $.ajax({
+        //url:'http://192.168.204.121:7777/api/v1/neuron/getspking/'+oneValues(),    //请求的URL地址
+        url:'http://192.168.204.121:7777/api/v1/neuron/getspkingfrombin/'+oneValuesUsername()+'/'+oneValuesGid()+'/'+(nowTT-10000)+'/'+(nowTT-1),
+        type:'GET', //请求方法，GET、POST、PUT、DELETE在这里设置
+        timeout:0,    //超时时间
+        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success:function(data,textStatus,jqXHR){    //成功的回调函数
+            scatterlist =[];
+            var item= data.data.NeuronSTs.Nst;
+            totalNeuNum = data.data.NeuNum
+            for(var i=0;i<item.length;i++){
+                po = new Array(item[i].Time,item[i].Id);
+                scatterlist.push(po)
+            }
+            startRequest()
+        },
+        error:function(xhr,textStatus){ //失败的回调函数
+        }
+    }) 
+    
+    if (nowTT == totalNeuNum) {
+        clearInterval(show_setInterval);
+    }
+}   
+        </script>
+    </body>
+</html>
+    

@@ -1,0 +1,602 @@
+import 'dart:math';
+import 'dart:async';
+import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
+import "package:velocity_x/velocity_x.dart";
+import 'package:liquid_ui/liquid_ui.dart';
+//import 'package:fl_chart/fl_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:hive/hive.dart';
+import 'package:flutter_web_chartjs/chartjs.models.dart';
+import 'package:flutter_web_chartjs/chartjs.wrapper.dart';
+
+import 'package:snns_cm/comm/comm.dart';
+import 'package:snns_cm/config/application.dart';
+import 'package:snns_cm/config/routes.dart';
+import 'package:snns_cm/components/toolsbar/menu.dart';
+import 'package:snns_cm/components/toolsbar/topbar.dart';
+import 'package:snns_cm/components/toolsbar/bottombar.dart';
+import 'package:snns_cm/services/api_Monitor.dart';
+import 'package:snns_cm/models/MonitorData.dart';
+
+/// Our sparkline data.
+class MonitorCluster extends StatefulWidget {
+  @override
+  _MonitorClusterState createState() => _MonitorClusterState();
+}
+
+class _MonitorClusterState extends State<MonitorCluster> {
+  Timer timer;
+  int counter = 0;
+  List<MonitorData> _listMD1;
+  List<MonitorData> _listMD2;
+  List<MonitorData> _listMD3;
+  List<MonitorData> _listMD4;
+  List<MonitorData> _listMD5;
+  List<MonitorData> _listMD6;
+  List<MonitorData> _listMD7;
+  List<MonitorData> _listMD8;
+  List<MonitorData> _listMD9;
+  ChartData _chartData1;
+  ChartData _chartData2;
+  ChartData _chartData3;
+  ChartData _chartData4;
+  ChartData _chartData5;
+  ChartData _chartData6;
+  ChartData _chartData7;
+  ChartData _chartData8;
+  ChartData _chartData9;
+  List<ChartAxis> _chartxAxes;
+  List<ChartAxis> _chartyAxes;
+// List<ChartData> _listChartData;
+// List<List<ChartAxis>> _listChartAxes;
+  final chartData1 = ChartData(datasets: [
+    ChartDataset(
+        data: [], label: 'CPU', backgroundColor: Colors.blue.withOpacity(0.4)),
+    ChartDataset(
+        data: [],
+        label: 'MEM',
+        backgroundColor: LinearGradient(colors: [
+          Colors.green.withOpacity(0.4),
+          Colors.green.withOpacity(0)
+        ], stops: [
+          0,
+          1
+        ])),
+  ]);
+  final chartxAxes = [
+    ChartAxis(
+      ticks: ChartTicks(min: 0, max: 60),
+      type: ChartCartesianAxisType.linear,
+    )
+  ];
+  final chartyAxes = [
+    ChartAxis(
+      ticks: ChartTicks(min: 0, max: 100),
+      type: ChartCartesianAxisType.linear,
+    )
+  ];
+  @override
+  void initState() {
+    super.initState();
+    _listMD1 = [];
+    _listMD2 = [];
+    _listMD3 = [];
+    _listMD4 = [];
+    _listMD5 = [];
+    _listMD6 = [];
+    _listMD7 = [];
+    _listMD8 = [];
+    _listMD9 = [];
+    _chartData1 = chartData1;
+    _chartData2 = chartData1;
+    _chartData3 = chartData1;
+    _chartData4 = chartData1;
+    _chartData5 = chartData1;
+    _chartData6 = chartData1;
+    _chartData7 = chartData1;
+    _chartData8 = chartData1;
+    _chartData9 = chartData1;
+    _chartxAxes = chartxAxes;
+    _chartyAxes = chartyAxes;
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => addValue());
+  }
+
+  void addValue() {
+    setState(() {
+      _getMonitorData(1);
+      _getMonitorData(2);
+      _getMonitorData(3);
+      _getMonitorData(4);
+      _getMonitorData(5);
+      _getMonitorData(6);
+      _getMonitorData(7);
+      _getMonitorData(8);
+      _getMonitorData(9);
+      counter++;
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: VxBox(
+        child: HStack([
+          GcMenu('MonitorCluster'), //左侧主菜单栏
+          VStack(
+            //主界面（导航栏、功能区、底部信息栏）
+            [
+              GcTopBar('MonitorCluster'), //主界面导航栏,
+              VxBox(
+                child: LColumn(children: [
+                  LRow(columns: [
+                    LColumn.child(
+                      child: monitorChart(1, _chartData1),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(2, _chartData2),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(3, _chartData3),
+                    ),
+                  ]),
+                  LRow(columns: [
+                    LColumn.child(
+                      child: monitorChart(4, _chartData4),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(5, _chartData5),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(6, _chartData6),
+                    ),
+                  ]),
+                  LRow(columns: [
+                    LColumn.child(
+                      child: monitorChart(7, _chartData7),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(8, _chartData8),
+                    ),
+                    LColumn.child(
+                      child: monitorChart(9, _chartData9),
+                    ),
+                  ]),
+                ]),
+              ).withDecoration(boxDecorationNONE).shadowXs.make().p(5).expand(),
+              GcBottomBar(),
+            ],
+          ).expand()
+        ]),
+      ).color(Vx.gray100).make(),
+    );
+  }
+
+// 监控状态卡组
+  Widget monitorCards(BuildContext context) {
+    return Container(
+        height: 100,
+        child: LRow(
+          columns: [
+            LColumn.child(child: monitorCardItem(context, '节点')),
+            LColumn.child(child: monitorCardItem(context, 'CPU')),
+            LColumn.child(child: monitorCardItem(context, '内存')),
+            LColumn.child(child: monitorCardItem(context, '任务')),
+          ],
+        ));
+  }
+
+// 监控状态卡
+  Widget monitorCardItem(BuildContext context, String title) {
+    return LCard(
+      elevation: 10.0,
+      color: Colors.grey[150],
+      body: LCardBody(
+        child: Row(
+          children: [
+            Icon(Icons.ac_unit),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Center(
+                    child: Text(title,
+                        style: TextStyle(color: Colors.blue[500], fontSize: 22),
+                        textAlign: TextAlign.center),
+                  ),
+                  Center(
+                    child: Text('70',
+                        style:
+                            TextStyle(color: Colors.green[500], fontSize: 18),
+                        textAlign: TextAlign.center),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+// Charts For CPU and Mem
+  Widget monitorChart(int idx, ChartData chartdata) {
+    return VxBox(
+      child: ChartJS(
+        id: "SNN0" + idx.toString(),
+        config: ChartConfig(
+          type: ChartType.line,
+          options: ChartOptions(
+            title: ChartTitle(display: true, text: "SNN0" + idx.toString()),
+            layout: ChartLayout(),
+            animationConfiguration: ChartAnimationConfiguration(
+              duration: Duration(milliseconds: 0),
+              easing: ChartEasing.easeOutQuart,
+            ),
+            scales: ChartScales(
+              xAxes: _chartxAxes,
+              yAxes: _chartyAxes,
+            ),
+          ),
+          data: chartdata,
+        ),
+      ),
+    ).withDecoration(boxDecorationNONE).shadowXs.make().p(3);
+  }
+
+  /// _getMonitorData() : 获取监控数据，并填充图表
+  Future _getMonitorData(int idx) async {
+    MonitorData rs;
+
+    //final dataDM1 = List<LinePoint>();
+
+    //final dataDM2 = List<LinePoint>();
+    final dataDM1 = [];
+    final dataDM2 = [];
+
+    int s;
+    rs = await getMonitorData("SNN0" + idx.toString());
+
+    switch (idx) {
+      // ------- idx =1 ------------------
+      case 1:
+        {
+          _listMD1.add(rs);
+
+          s = 0;
+          for (var item in _listMD1) {
+            // print('========');
+            // print(item.mem);
+            // print('========');
+            if (_listMD1.length > 60) {
+              _listMD1.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          print(dataDM1);
+          _chartData1 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =2 ------------------
+      case 2:
+        {
+          _listMD2.add(rs);
+          s = 0;
+          for (var item in _listMD2) {
+            if (_listMD2.length > 60) {
+              _listMD2.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData2 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =1 ------------------
+      case 3:
+        {
+          _listMD3.add(rs);
+          s = 0;
+          for (var item in _listMD3) {
+            if (_listMD3.length > 60) {
+              _listMD3.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData3 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =4 ------------------
+      case 4:
+        {
+          _listMD4.add(rs);
+          s = 0;
+          for (var item in _listMD4) {
+            if (_listMD4.length > 60) {
+              _listMD4.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData4 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =5 ------------------
+      case 5:
+        {
+          _listMD5.add(rs);
+          s = 0;
+          for (var item in _listMD5) {
+            if (_listMD5.length > 60) {
+              _listMD5.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData5 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =6 ------------------
+      case 6:
+        {
+          _listMD6.add(rs);
+          s = 0;
+          for (var item in _listMD6) {
+            if (_listMD6.length > 60) {
+              _listMD6.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData6 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =7 ------------------
+      case 7:
+        {
+          _listMD7.add(rs);
+          s = 0;
+          for (var item in _listMD7) {
+            if (_listMD7.length > 60) {
+              _listMD7.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData7 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =8 ------------------
+      case 8:
+        {
+          _listMD8.add(rs);
+          s = 0;
+          for (var item in _listMD8) {
+            if (_listMD8.length > 60) {
+              _listMD8.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData8 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+      // ------- idx =9 ------------------
+      case 9:
+        {
+          _listMD9.add(rs);
+          s = 0;
+          for (var item in _listMD9) {
+            if (_listMD9.length > 60) {
+              _listMD9.removeAt(0);
+            } else {
+              s = s + 1;
+              dataDM1.add(LinePoint(s, item.cpu));
+              dataDM2.add(LinePoint(s, item.mem));
+            }
+          }
+          _chartData9 = ChartData(datasets: [
+            ChartDataset(
+                data: dataDM1,
+                label: 'CPU',
+                backgroundColor: Colors.blue.withOpacity(0.4)),
+            ChartDataset(
+                data: dataDM2,
+                label: 'MEM',
+                backgroundColor: LinearGradient(colors: [
+                  Colors.green.withOpacity(0.4),
+                  Colors.green.withOpacity(0)
+                ], stops: [
+                  0,
+                  1
+                ])),
+          ]);
+        }
+        break;
+    }
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    //final data = List<OrdinalSales>();
+
+    final data = [];
+    for (var i = 0; i < 60; i++) {
+      data.add(OrdinalSales(i.toString(), Random().nextInt(100)));
+    }
+    return [
+      new charts.Series<OrdinalSales, String>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
+}
+
+/// Sample ordinal data type.
+class OrdinalSales {
+  final String year;
+  final int sales;
+
+  OrdinalSales(this.year, this.sales);
+}
+
+/// Sample ordinal data type.
+class LinePoint {
+  int x;
+  double y;
+
+  LinePoint(this.x, this.y);
+
+  Map toJson() => {
+        'x': x,
+        'y': y,
+      };
+}

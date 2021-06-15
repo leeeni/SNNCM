@@ -1,0 +1,133 @@
+Date : 2020-12-25 10:36:09
+Directory : c:\Boxs\Tmp\pcl\snns_cm
+Total : 58 files,  3376 codes, 614 comments, 378 blanks, all 4368 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Dart       |         33 |      2,897 |        494 |        302 |      3,693 |
+| JSON       |          3 |        168 |          0 |          3 |        171 |
+| XML        |          9 |        125 |         51 |         11 |        187 |
+| Groovy     |          3 |         81 |          3 |         20 |        104 |
+| YAML       |          1 |         31 |         49 |         14 |         94 |
+| HTML       |          1 |         29 |         16 |          7 |         52 |
+| Markdown   |          3 |         20 |          0 |         13 |         33 |
+| Swift      |          1 |         12 |          0 |          2 |         14 |
+| Properties |          2 |          8 |          1 |          2 |         11 |
+| Kotlin     |          1 |          4 |          0 |          3 |          7 |
+| C++        |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                    | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                       |         58 |      3,376 |        614 |        378 |      4,368 |
+| android                                                                                 |         13 |        157 |         53 |         34 |        244 |
+| android\app                                                                             |          9 |        114 |         52 |         23 |        189 |
+| android\app\src                                                                         |          8 |         68 |         49 |         12 |        129 |
+| android\app\src\debug                                                                   |          1 |          4 |          3 |          1 |          8 |
+| android\app\src\main                                                                    |          6 |         60 |         43 |         10 |        113 |
+| android\app\src\main\kotlin                                                             |          1 |          4 |          0 |          3 |          7 |
+| android\app\src\main\kotlin\com                                                         |          1 |          4 |          0 |          3 |          7 |
+| android\app\src\main\kotlin\com\example                                                 |          1 |          4 |          0 |          3 |          7 |
+| android\app\src\main\kotlin\com\example\snns_cm                                         |          1 |          4 |          0 |          3 |          7 |
+| android\app\src\main\res                                                                |          4 |         26 |         32 |          6 |         64 |
+| android\app\src\main\res\drawable                                                       |          1 |          4 |          7 |          2 |         13 |
+| android\app\src\main\res\drawable-v21                                                   |          1 |          4 |          7 |          2 |         13 |
+| android\app\src\main\res\values                                                         |          1 |          9 |          9 |          1 |         19 |
+| android\app\src\main\res\values-night                                                   |          1 |          9 |          9 |          1 |         19 |
+| android\app\src\profile                                                                 |          1 |          4 |          3 |          1 |          8 |
+| android\gradle                                                                          |          1 |          5 |          1 |          1 |          7 |
+| android\gradle\wrapper                                                                  |          1 |          5 |          1 |          1 |          7 |
+| doc                                                                                     |          1 |          7 |          0 |          4 |         11 |
+| ios                                                                                     |          7 |        222 |          2 |          9 |        233 |
+| ios\Runner                                                                              |          7 |        222 |          2 |          9 |        233 |
+| ios\Runner\Assets.xcassets                                                              |          3 |        148 |          0 |          4 |        152 |
+| ios\Runner\Assets.xcassets\AppIcon.appiconset                                           |          1 |        122 |          0 |          1 |        123 |
+| ios\Runner\Assets.xcassets\LaunchImage.imageset                                         |          2 |         26 |          0 |          3 |         29 |
+| ios\Runner\Base.lproj                                                                   |          2 |         61 |          2 |          2 |         65 |
+| lib                                                                                     |         33 |      2,897 |        494 |        302 |      3,693 |
+| lib\comm                                                                                |          1 |         72 |          4 |          6 |         82 |
+| lib\components                                                                          |         14 |      1,977 |        211 |        138 |      2,326 |
+| lib\components\app                                                                      |          1 |         48 |          6 |          7 |         61 |
+| lib\components\home                                                                     |          2 |        156 |         85 |         15 |        256 |
+| lib\components\pages                                                                    |          7 |      1,433 |        107 |         91 |      1,631 |
+| lib\components\toolsbar                                                                 |          4 |        340 |         13 |         25 |        378 |
+| lib\config                                                                              |          3 |         97 |          4 |         19 |        120 |
+| lib\dbutils                                                                             |          1 |          2 |         75 |         16 |         93 |
+| lib\editable                                                                            |          6 |        478 |        156 |         72 |        706 |
+| lib\editable\commons                                                                    |          3 |         55 |          5 |         10 |         70 |
+| lib\editable\widgets                                                                    |          2 |        161 |          7 |          8 |        176 |
+| lib\models                                                                              |          3 |         95 |          2 |         22 |        119 |
+| lib\restutils                                                                           |          1 |          4 |          1 |          2 |          7 |
+| lib\services                                                                            |          1 |         51 |         30 |         12 |         93 |
+| lib\widget                                                                              |          2 |         90 |          0 |          9 |         99 |
+| web                                                                                     |          2 |         52 |         16 |          8 |         76 |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Boxs\Tmp\pcl\snns_cm\README.md                                                       | Markdown   |         10 |          0 |          7 |         17 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\build.gradle                                        | Groovy     |         46 |          3 |         11 |         60 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\debug\AndroidManifest.xml                       | XML        |          4 |          3 |          1 |          8 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\AndroidManifest.xml                        | XML        |         30 |         11 |          1 |         42 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\kotlin\com\example\snns_cm\MainActivity.kt | Kotlin     |          4 |          0 |          3 |          7 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\res\drawable-v21\launch_background.xml     | XML        |          4 |          7 |          2 |         13 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\res\drawable\launch_background.xml         | XML        |          4 |          7 |          2 |         13 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\res\values-night\styles.xml                | XML        |          9 |          9 |          1 |         19 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\main\res\values\styles.xml                      | XML        |          9 |          9 |          1 |         19 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\app\src\profile\AndroidManifest.xml                     | XML        |          4 |          3 |          1 |          8 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\build.gradle                                            | Groovy     |         27 |          0 |          5 |         32 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\gradle.properties                                       | Properties |          3 |          0 |          1 |          4 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\gradle\wrapper\gradle-wrapper.properties                | Properties |          5 |          1 |          1 |          7 |
+| c:\Boxs\Tmp\pcl\snns_cm\android\settings.gradle                                         | Groovy     |          8 |          0 |          4 |         12 |
+| c:\Boxs\Tmp\pcl\snns_cm\doc\Flutter SDK Install.md                                      | Markdown   |          7 |          0 |          4 |         11 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\AppDelegate.swift                                    | Swift      |         12 |          0 |          2 |         14 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json     | JSON       |        122 |          0 |          1 |        123 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json   | JSON       |         23 |          0 |          1 |         24 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Assets.xcassets\LaunchImage.imageset\README.md       | Markdown   |          3 |          0 |          2 |          5 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Base.lproj\LaunchScreen.storyboard                   | XML        |         36 |          1 |          1 |         38 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Base.lproj\Main.storyboard                           | XML        |         25 |          1 |          1 |         27 |
+| c:\Boxs\Tmp\pcl\snns_cm\ios\Runner\Runner-Bridging-Header.h                             | C++        |          1 |          0 |          1 |          2 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\comm\comm.dart                                              | Dart       |         72 |          4 |          6 |         82 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\app\app_component.dart                           | Dart       |         48 |          6 |          7 |         61 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\home\home_component.dart                         | Dart       |         53 |          4 |          5 |         62 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\home\login_screen.dart                           | Dart       |        103 |         81 |         10 |        194 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\MonitorCluster.dart                        | Dart       |        552 |         21 |         18 |        591 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\MonitorPC.dart                             | Dart       |        146 |         12 |         10 |        168 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\NodeList.dart                              | Dart       |        218 |         19 |         16 |        253 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\TaskDetails.dart                           | Dart       |         87 |         12 |          6 |        105 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\TaskList.dart                              | Dart       |        123 |         12 |         10 |        145 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\TaskReplay.dart                            | Dart       |        166 |         18 |         18 |        202 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\pages\UserList.dart                              | Dart       |        141 |         13 |         13 |        167 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\toolsbar\bottombar.dart                          | Dart       |         25 |          0 |          3 |         28 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\toolsbar\gc_drawer.dart                          | Dart       |         39 |          0 |          3 |         42 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\toolsbar\menu.dart                               | Dart       |        142 |          9 |         10 |        161 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\components\toolsbar\topbar.dart                             | Dart       |        134 |          4 |          9 |        147 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\config\application.dart                                     | Dart       |          7 |          0 |          2 |          9 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\config\route_handlers.dart                                  | Dart       |         55 |          0 |         13 |         68 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\config\routes.dart                                          | Dart       |         35 |          4 |          4 |         43 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\dbutils\db_helper.dart                                      | Dart       |          2 |         75 |         16 |         93 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\commons\constants.dart                             | Dart       |          1 |          0 |          1 |          2 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\commons\helpers.dart                               | Dart       |         41 |          5 |          5 |         51 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\commons\math_functions.dart                        | Dart       |         13 |          0 |          4 |         17 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\editable.dart                                      | Dart       |        262 |        144 |         54 |        460 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\widgets\table_body.dart                            | Dart       |        108 |          6 |          5 |        119 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\editable\widgets\table_header.dart                          | Dart       |         53 |          1 |          3 |         57 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\main.dart                                                   | Dart       |         31 |         11 |          6 |         48 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\models\MonitorData.dart                                     | Dart       |         14 |          0 |          4 |         18 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\models\Node.dart                                            | Dart       |         49 |          0 |         11 |         60 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\models\User.dart                                            | Dart       |         32 |          2 |          7 |         41 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\restutils\rest_helper.dart                                  | Dart       |          4 |          1 |          2 |          7 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\services\api_service.dart                                   | Dart       |         51 |         30 |         12 |         93 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\widget\center_screen.dart                                   | Dart       |         51 |          0 |          4 |         55 |
+| c:\Boxs\Tmp\pcl\snns_cm\lib\widget\expansion_title.dart                                 | Dart       |         39 |          0 |          5 |         44 |
+| c:\Boxs\Tmp\pcl\snns_cm\pubspec.yaml                                                    | YAML       |         31 |         49 |         14 |         94 |
+| c:\Boxs\Tmp\pcl\snns_cm\web\index.html                                                  | HTML       |         29 |         16 |          7 |         52 |
+| c:\Boxs\Tmp\pcl\snns_cm\web\manifest.json                                               | JSON       |         23 |          0 |          1 |         24 |
+| Total                                                                                   |            |      3,376 |        614 |        378 |      4,368 |
++-----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

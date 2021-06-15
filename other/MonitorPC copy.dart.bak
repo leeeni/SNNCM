@@ -1,0 +1,167 @@
+import 'dart:math';
+import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
+import "package:velocity_x/velocity_x.dart";
+import 'package:liquid_ui/liquid_ui.dart';
+//import 'package:fl_chart/fl_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+import 'package:snns_cm/comm/comm.dart';
+import 'package:snns_cm/config/application.dart';
+import 'package:snns_cm/config/routes.dart';
+import 'package:snns_cm/components/toolsbar/menu.dart';
+import 'package:snns_cm/components/toolsbar/topbar.dart';
+import 'package:snns_cm/components/toolsbar/bottombar.dart';
+
+class MonitorPC extends StatelessWidget {
+//   @override
+//   _MonitorPCState createState() => _MonitorPCState();
+// }
+// class _MonitorPCState extends State<MonitorPC> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: VxBox(
+        child: HStack([
+          GcMenu('MonitorPC'), //左侧主菜单栏
+          VStack(
+            //主界面（导航栏、功能区、底部信息栏）
+            [
+              GcTopBar('MonitorPC'), //主界面导航栏,
+              VxBox(
+                child: VStack(
+                  [
+                    // monitorCards(context),
+                    monitorChartCards(context),
+                  ],
+                ),
+              ).withDecoration(boxDecorationNONE).shadowXs.make().p(5).expand(),
+              GcBottomBar(),
+            ],
+          ).expand()
+        ]),
+      ).color(Vx.gray100).make(),
+    );
+  }
+
+// 监控状态卡组
+  Widget monitorCards(BuildContext context) {
+    return Container(
+        height: 100,
+        child: LRow(
+          columns: [
+            LColumn.child(child: monitorCardItem(context, '节点')),
+            LColumn.child(child: monitorCardItem(context, 'CPU')),
+            LColumn.child(child: monitorCardItem(context, '内存')),
+            LColumn.child(child: monitorCardItem(context, '任务')),
+          ],
+        ));
+  }
+
+// 监控状态卡
+  Widget monitorCardItem(BuildContext context, String title) {
+    return LCard(
+      elevation: 10.0,
+      color: Colors.grey[150],
+      body: LCardBody(
+        child: Row(
+          children: [
+            Icon(Icons.ac_unit),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Center(
+                    child: Text(title,
+                        style: TextStyle(color: Colors.blue[500], fontSize: 22),
+                        textAlign: TextAlign.center),
+                  ),
+                  Center(
+                    child: Text('70',
+                        style:
+                            TextStyle(color: Colors.green[500], fontSize: 18),
+                        textAlign: TextAlign.center),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+// 监控状态卡组
+  Widget monitorChartCards(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        children: [
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+          monitorChart(context, ' '),
+        ],
+      ),
+    );
+  }
+
+// Charts For CPU and Mem
+  Widget monitorChart(BuildContext context, String title) {
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: Container(
+        height: 200,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(6.0),
+            ),
+            border: Border.all(
+              width: 1,
+              color: Colors.grey[100],
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey[300],
+                  offset: Offset(3.0, 3.0), //阴影y轴偏移量
+                  blurRadius: 3, //阴影模糊程度
+                  spreadRadius: 3 //阴影扩散程度
+                  ),
+            ]),
+        child: charts.BarChart(
+          _createSampleData(),
+          animate: false,
+        ),
+      ),
+    );
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
+    final data = List<OrdinalSales>();
+    for (var i = 0; i < 60; i++) {
+      data.add(OrdinalSales(i.toString(), Random().nextInt(100)));
+    }
+    return [
+      new charts.Series<OrdinalSales, String>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (OrdinalSales sales, _) => sales.year,
+        measureFn: (OrdinalSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
+}
+
+/// Sample ordinal data type.
+class OrdinalSales {
+  final String year;
+  final int sales;
+
+  OrdinalSales(this.year, this.sales);
+}
